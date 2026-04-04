@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 struct Client{
     char nom[20];
     char prenom[20];
@@ -46,7 +48,6 @@ struct date{
 };
 
 struct Reserv{
-    int Numserv;
     struct date d;
 };
 
@@ -88,7 +89,7 @@ int verifj(int n, int m, int a){
             j=30;
             break;
         case 2:
-            if (a%2==0 ){j=29;}
+            if ((a%4==0 && a%100!=0)){j=29;}
             else{j=28;}
     }
     if (n<1 || n>j){test=0;}
@@ -97,8 +98,6 @@ int verifj(int n, int m, int a){
 
 void CreeReserv(){
     struct Reserv r;
-    printf("Si vous souhaitez effectuer une reservation choisissez le numero de service souhaite. \n");
-    scanf("%d",&r.Numserv);
     printf("La date de la reservation\n");
     do{printf("Mois\n");
     scanf("%d",&r.d.m);
@@ -123,37 +122,142 @@ void recom(){
     printf("Notez-nous sur 10 \n");
     scanf("%s",note);
     printf("Ecrivez-nous un commentaire\n");
-    scanf("%s",cm);
+    scanf(" %[^\n]", cm);
     reco=fopen("recommendation.txt","a");
-    fprintf(reco,note);
-    fprintf(reco,"\n");
-    fprintf(reco,cm);
-    fprintf(reco,"\n");
+    fprintf(reco, "%s\n%s\n", note, cm);
     fclose(reco);
 }
 
+void AjouteC(struct Client c,FILE *Client1){
+    Client1=fopen("Client.txt","a");
+    fprintf(Client1, "\n %s\n %s \n%d\n %d",c.nom,c.prenom,c.CIN,c.Age);
+    fclose(Client1);
+}
+
+void Modifres(){
+    printf("Modifier la date \n");
+    CreeReserv();
+}
+
+struct pointage{
+    float HE;
+    float HS;
+    float S;
+};
+
+float pentre(){
+    float n;
+    do{printf("Tapez l'heure d'entre\n");
+    scanf("%f",&n);
+    }while(n<8);
+    return n;
+}
+
+float psortie(){
+    float n;
+    do{printf("Tapez l'heure de sortie\n");
+    scanf("%f",&n);
+    }while(n>17.15);
+    return n;
+}
+
+float moyenneh(float HE,float HS){
+    float s=0;
+    s=HS-HE;
+    return s;
+}
+
+int recher(int cin){
+    FILE *f;
+    struct Client c;
+    int trouve = 0;
+    f = fopen("client.txt", "r");
+    while(fscanf(f, "%s %s %d %d",
+        c.nom, c.prenom, &c.CIN, &c.Age) != EOF){
+
+        if(c.CIN == cin){
+
+            trouve = 1;
+            break;
+        }
+    }
+    fclose(f);
+    if(trouve == 0){
+        printf("Client non trouvé\n");
+    }
+    return trouve;
+
+}
+
+
 int main()
-{   FILE *reco;
+{   FILE *Client1;
+    FILE *reco;
     int rep;
     struct Client c;
     printf("Bienvenue\n");
-    printf("Etes-vous un nouveau cliente \n");
-    printf("1-Oui \n");
-    printf("2-Non \n");
-    scanf("%d",&rep);
-    if (rep==1){
-        printf("Quel est ton nom \n");
-        scanf("%s",c.nom);
-        printf("Quel est ton prenom \n");
-        scanf("%s",c.prenom);
-        printf("Quel est ton CIN \n");
-        scanf("%d",&c.CIN);
-        printf("Quel est ton Age \n");
-        scanf("%d",&c.Age);
-        Menu();
-        RecEva(reco);
-        CreeReserv();
-        recom();
+    int pp;
+    printf("1-etes-vous un client\n ");
+    printf("2-etes-vous un emplye\n");
+    scanf("%d",&pp);
+    if (pp==1){
+        printf("Etes-vous un nouveau cliente \n");
+        printf("1-Oui \n");
+        printf("2-Non \n");
+        scanf("%d",&rep);
+        if (rep==1){
+            int Numserv;
+            printf("Quel est ton nom \n");
+            scanf("%s",c.nom);
+            printf("Quel est ton prenom \n");
+            scanf("%s",c.prenom);
+            printf("Quel est ton CIN \n");
+            scanf("%d",&c.CIN);
+            printf("Quel est ton Age \n");
+            scanf("%d",&c.Age);
+            Menu();
+            RecEva(reco);
+            printf("Si vous souhaitez effectuer une reservation choisissez le numero de service souhaite. \n");
+            scanf("%d",&Numserv);
+            CreeReserv();
+            recom();
+            AjouteC(c,Client1);
+
+        }else if (rep==2){
+            int cin;
+            printf("Entrez votre CIN\n");
+            scanf("%d",&cin);
+            if (recher(cin)==1){
+                int op;
+                printf("1-Modifier votre reservation\n");
+                printf("2-Cree une nouvelle reservation\n");
+                scanf("%d",&op);
+                if (op==1){
+                    Modifres();
+                }
+                else if (op==2){
+                    int Numserv;
+                    printf("Nous vous remercions de votre confidance, vous beneficiez d'une reduction de 25 pourcent sur votre prochain service.\n");
+                    Menu();
+                    printf("Si vous souhaitez effectuer une reservation choisissez le numero de service souhaite. \n");
+                    scanf("%d",&Numserv);
+                    RecEva(reco);
+                    CreeReserv();
+                    recom();
+                }
+
+            }
+        }
+    }else if (pp==2){
+        char codeEm[100];
+        do{printf("Tapez votre code securite\n");
+        scanf("%s",codeEm);
+        }while(codeEm=="GlowAndGo01");
+        struct pointage p;
+        p.HE=pentre();
+        p.HS=psortie();
+        p.S=moyenneh(p.HE,p.HS);
+        printf("Somme d'heures travailler aujourd'hui %f\n",p.S);
     }
 
     return 0;
