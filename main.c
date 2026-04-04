@@ -1,3 +1,7 @@
+//Projet salon de coiffure 
+//Nourcenne Belhajhamida
+//Zaineb Benhousine
+//Nour Islem Rafrafi
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
