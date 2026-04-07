@@ -175,7 +175,7 @@ int recher(int cin){
     FILE *f;
     struct Client c;
     int trouve = 0;
-    f = fopen("client.txt", "r");
+    f = fopen("Client.txt", "r");
     while(fscanf(f, "%s %s %d %d",
         c.nom, c.prenom, &c.CIN, &c.Age) != EOF){
 
