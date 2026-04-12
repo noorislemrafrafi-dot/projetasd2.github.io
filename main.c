@@ -5,14 +5,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+//Enregistrement d'un client
 struct Client{
     char nom[20];
     char prenom[20];
     int CIN;
     int Age;
 };
-
+//Menu de service
 void Menu(){
         printf("Liste de services \n");
         printf("1-SERVISES DE COIFFURE\n");
@@ -35,7 +35,7 @@ void Menu(){
         printf("42Maquillage de mariee        100DT \n");
         printf("43Teinture de sourcils        90DT \n");
 }
-
+//Procedure affichage de recomendation
 void RecEva(FILE *reco){
     reco=fopen("recommendation.txt","r");
     char ch[1000];
@@ -43,18 +43,17 @@ void RecEva(FILE *reco){
     printf("%s",ch);
     fclose(reco);
 }
-
+//Enregistrement de reservation
 struct date{
    int j;
    int m;
    int an;
    int hr;
 };
-
 struct Reserv{
     struct date d;
 };
-
+//Fonction verification d'un jour valide
 int verifj(int n, int m, int a){
     int test=1;
     int j;
@@ -99,7 +98,7 @@ int verifj(int n, int m, int a){
     if (n<1 || n>j){test=0;}
     return test;
 }
-
+//Procedure creation d'un reservation
 void CreeReserv(){
     struct Reserv r;
     printf("La date de la reservation\n");
@@ -117,7 +116,7 @@ void CreeReserv(){
     }while(r.d.hr<8 || r.d.hr>16);
 }
 
-
+//Procedure de saisie d'un recommendation
 void recom(){
     FILE *reco;
     char note[10];
@@ -131,24 +130,24 @@ void recom(){
     fprintf(reco, "%s\n%s\n", note, cm);
     fclose(reco);
 }
-
+//Procedure ajoute un client dans un fichier Client.txt
 void AjouteC(struct Client c,FILE *Client1){
     Client1=fopen("Client.txt","a");
     fprintf(Client1, "\n %s\n %s \n%d\n %d",c.nom,c.prenom,c.CIN,c.Age);
     fclose(Client1);
 }
-
+//Modification d'un reservation
 void Modifres(){
     printf("Modifier la date \n");
     CreeReserv();
 }
-
+//enregistrement de pointage d'un employe
 struct pointage{
     float HE;
     float HS;
     float S;
 };
-
+//Fonctions control de saisie pointage
 float pentre(){
     float n;
     do{printf("Tapez l'heure d'entre\n");
@@ -164,51 +163,53 @@ float psortie(){
     }while(n>17.15);
     return n;
 }
-
+//Calcule moyenne d'heure travailler
 float moyenneh(float HE,float HS){
     float s=0;
     s=HS-HE;
     return s;
 }
-
+//Recherche s'il un client existe
 int recher(int cin){
     FILE *f;
     struct Client c;
-    int trouve = 0;
-    f = fopen("Client.txt", "r");
-    while(fscanf(f, "%s %s %d %d",
-        c.nom, c.prenom, &c.CIN, &c.Age) != EOF){
-
-        if(c.CIN == cin){
-
-            trouve = 1;
+    int trouve=0;
+    f=fopen("Client.txt","r");
+    while(fscanf(f,"%s %s %d %d",c.nom,c.prenom,&c.CIN,&c.Age)!=EOF){
+        if(c.CIN==cin){
+            trouve=1;
             break;
         }
     }
     fclose(f);
-    if(trouve == 0){
+    if(trouve==0){
         printf("Client non trouvé\n");
     }
     return trouve;
 
 }
 
-
+//Programme principale
 int main()
 {   FILE *Client1;
     FILE *reco;
     int rep;
     struct Client c;
+    printf("______________________\n");
+    printf("  GlowAndGo Salon\n");
+    printf("______________________\n");
     printf("Bienvenue\n");
     int pp;
     printf("1-etes-vous un client\n ");
     printf("2-etes-vous un emplye\n");
     scanf("%d",&pp);
+    //Si un Client
     if (pp==1){
         printf("Etes-vous un nouveau cliente \n");
         printf("1-Oui \n");
         printf("2-Non \n");
         scanf("%d",&rep);
+        //Si un client nouveau
         if (rep==1){
             int Numserv;
             printf("Quel est ton nom \n");
@@ -227,7 +228,8 @@ int main()
             recom();
             AjouteC(c,Client1);
 
-        }else if (rep==2){
+        }//Si un client n'est pas nouveau
+        else if (rep==2){
             int cin;
             printf("Entrez votre CIN\n");
             scanf("%d",&cin);
@@ -252,7 +254,8 @@ int main()
 
             }
         }
-    }else if (pp==2){
+    }//Si un employe
+    else if (pp==2){
         char codeEm[100];
         do{printf("Tapez votre code securite\n");
         scanf("%s",codeEm);
