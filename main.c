@@ -18,29 +18,30 @@ void Menu(){
         printf("1-SERVISES DE COIFFURE\n");
         printf("11-Coupe de cheveux     10DT \n");
         printf("12-Coloration Complete  150DT \n");
-        printf("13Meches               60DT \n");
-        printf("14Lissage de keratine  35DT \n");
+        printf("13-Meches               60DT \n");
+        printf("14-Lissage de keratine  35DT \n");
         printf("\n");
         printf("2-SERVICES D'ONGLES \n");
-        printf("21Manucure Classique          15DT \n");
-        printf("22Manucure gel                25DT \n");
-        printf("23Pose d'ongles en acrylique  50DT \n");
+        printf("21-Manucure Classique          15DT \n");
+        printf("22-Manucure gel                25DT \n");
+        printf("23-Pose d'ongles en acrylique  50DT \n");
         printf("\n");
         printf("3-SOINS DU VISAGE \n");
-        printf("31Soin du visage base       100DT \n");
-        printf("32Soin du visage anti-age   230DT \n");
+        printf("31-Soin du visage base       100DT \n");
+        printf("32-Soin du visage anti-age   230DT \n");
         printf("\n");
         printf("4-MAQUILLAGE ET SOURCILS \n");
-        printf("41Application de maquillage   80DT \n");
-        printf("42Maquillage de mariee        100DT \n");
-        printf("43Teinture de sourcils        90DT \n");
+        printf("41-Application de maquillage   80DT \n");
+        printf("42-Maquillage de mariee        100DT \n");
+        printf("43-Teinture de sourcils        90DT \n");
 }
 //Procedure affichage de recomendation
-void RecEva(FILE *reco){
-    reco=fopen("recommendation.txt","r");
+void RecEva(){
+    FILE *reco= fopen("recommendation.txt","r");
     char ch[1000];
-    fgets(ch,1000,reco);
-    printf("%s",ch);
+    while(fgets(ch,1000,reco)){
+        printf("%s", ch);
+    }
     fclose(reco);
 }
 //Enregistrement de reservation
@@ -92,7 +93,7 @@ int verifj(int n, int m, int a){
             j=30;
             break;
         case 2:
-            if ((a%4==0 && a%100!=0)){j=29;}
+            if ((a%4==0 && a%100!=0) || (a%400==0)){j=29;}
             else{j=28;}
     }
     if (n<1 || n>j){test=0;}
@@ -131,8 +132,8 @@ void recom(){
     fclose(reco);
 }
 //Procedure ajoute un client dans un fichier Client.txt
-void AjouteC(struct Client c,FILE *Client1){
-    Client1=fopen("Client.txt","a");
+void AjouteC(struct Client c){
+    FILE *Client1=fopen("Client.txt","a");
     fprintf(Client1, "\n %s\n %s \n%d\n %d",c.nom,c.prenom,c.CIN,c.Age);
     fclose(Client1);
 }
@@ -191,8 +192,7 @@ int recher(int cin){
 
 //Programme principale
 int main()
-{   FILE *Client1;
-    FILE *reco;
+{
     int rep;
     struct Client c;
     printf("______________________\n");
@@ -221,12 +221,13 @@ int main()
             printf("Quel est ton Age \n");
             scanf("%d",&c.Age);
             Menu();
-            RecEva(reco);
+            printf("les avis de nos clients\n");
+            RecEva();
             printf("Si vous souhaitez effectuer une reservation choisissez le numero de service souhaite. \n");
             scanf("%d",&Numserv);
             CreeReserv();
             recom();
-            AjouteC(c,Client1);
+            AjouteC(c);
 
         }//Si un client n'est pas nouveau
         else if (rep==2){
@@ -245,9 +246,9 @@ int main()
                     int Numserv;
                     printf("Nous vous remercions de votre confidance, vous beneficiez d'une reduction de 25 pourcent sur votre prochain service.\n");
                     Menu();
-                    printf("Si vous souhaitez effectuer une reservation choisissez le numero de service souhaite. \n");
+                    RecEva();
+                    printf("choisissez le numero de service souhaite. \n");
                     scanf("%d",&Numserv);
-                    RecEva(reco);
                     CreeReserv();
                     recom();
                 }
@@ -259,7 +260,7 @@ int main()
         char codeEm[100];
         do{printf("Tapez votre code securite\n");
         scanf("%s",codeEm);
-        }while(codeEm=="GlowAndGo01");
+        }while(strcmp(codeEm, "GlowAndGo01") != 0);
         struct pointage p;
         p.HE=pentre();
         p.HS=psortie();
@@ -269,3 +270,4 @@ int main()
 
     return 0;
 }
+
