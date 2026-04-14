@@ -1,4 +1,4 @@
-//Projet salon de coiffure 
+//Projet salon de beauté
 //Nourcenne Belhajhamida
 //Zaineb Benhousine
 //Nour Islem Rafrafi
