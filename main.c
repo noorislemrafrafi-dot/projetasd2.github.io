@@ -5,6 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//clear screen
+void clearScreen(){
+    system("cls || clear");
+}
+
 //Enregistrement d'un client
 struct Client{
     char nom[20];
@@ -198,17 +203,22 @@ int main()
     printf("______________________\n");
     printf("  GlowAndGo Salon\n");
     printf("______________________\n");
+    printf("\n");
     printf("Bienvenue\n");
     int pp;
-    printf("1-etes-vous un client\n ");
-    printf("2-etes-vous un emplye\n");
+    printf("1-etes-vous un client\n");
+    printf("2-etes-vous un employe\n");
     scanf("%d",&pp);
+    //clear
+    clearScreen();
     //Si un Client
     if (pp==1){
         printf("Etes-vous un nouveau cliente \n");
         printf("1-Oui \n");
         printf("2-Non \n");
         scanf("%d",&rep);
+        //clear
+        clearScreen();
         //Si un client nouveau
         if (rep==1){
             int Numserv;
@@ -220,13 +230,26 @@ int main()
             scanf("%d",&c.CIN);
             printf("Quel est ton Age \n");
             scanf("%d",&c.Age);
-            Menu();
+            //clear
+            clearScreen();
             printf("les avis de nos clients\n");
+            fflush(stdout);
             RecEva();
+            printf("\n\n");
+            fflush(stdout);
+            Menu();
+            printf("\n\n");
+            fflush(stdout);
             printf("Si vous souhaitez effectuer une reservation choisissez le numero de service souhaite. \n");
             scanf("%d",&Numserv);
+            //clear
+            clearScreen();
             CreeReserv();
+            fflush(stdout);
+            //clear
+            clearScreen();
             recom();
+            fflush(stdout);
             AjouteC(c);
 
         }//Si un client n'est pas nouveau
@@ -234,22 +257,36 @@ int main()
             int cin;
             printf("Entrez votre CIN\n");
             scanf("%d",&cin);
+            //clear
+            clearScreen();
             if (recher(cin)==1){
                 int op;
                 printf("1-Modifier votre reservation\n");
                 printf("2-Cree une nouvelle reservation\n");
                 scanf("%d",&op);
+                //clear
+                clearScreen();
                 if (op==1){
                     Modifres();
                 }
                 else if (op==2){
                     int Numserv;
                     printf("Nous vous remercions de votre confidance, vous beneficiez d'une reduction de 25 pourcent sur votre prochain service.\n");
+                    fflush(stdout);
                     Menu();
+                    fflush(stdout);
+                    printf("\n\n");
+                    printf("les avis de nos clients\n");
                     RecEva();
+                    fflush(stdout);
+                    printf("\n\n");
                     printf("choisissez le numero de service souhaite. \n");
                     scanf("%d",&Numserv);
+                    //clear
+                    clearScreen();
                     CreeReserv();
+                    //clear
+                    clearScreen();
                     recom();
                 }
 
@@ -260,14 +297,16 @@ int main()
         char codeEm[100];
         do{printf("Tapez votre code securite\n");
         scanf("%s",codeEm);
+        //clear
+        clearScreen();
         }while(strcmp(codeEm, "GlowAndGo01") != 0);
         struct pointage p;
         p.HE=pentre();
         p.HS=psortie();
         p.S=moyenneh(p.HE,p.HS);
         printf("Somme d'heures travailler aujourd'hui %f\n",p.S);
+        fflush(stdout);
     }
 
     return 0;
 }
-
