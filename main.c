@@ -310,3 +310,4 @@ int main()
 
     return 0;
 }
+//fflush(stdout); without it printf ou any message without scanf n'execute pas
